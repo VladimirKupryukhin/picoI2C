@@ -36,51 +36,52 @@ int main () {
     gpio_init(DATA_PIN);
     gpio_init(CLOCK_PIN);
 
-    // //Enable the MPU
-    // idle();
-    // start();
-    // write(1);
-    // write(1);
-    // write(0);
-    // write(1);
-    // write(0);
-    // write(0);
-    // write(0);
-    // write(0); //R/W
-    // BUS_ONE(DATA_PIN);// Release the data bus 
-    // int aack1 = readACK();
-    // write(0);
-    // write(1);
-    // write(1);
-    // write(0);
-    // write(1);
-    // write(0);
-    // write(1);
-    // write(1);
-    // BUS_ONE(DATA_PIN);// Release the data bus 
-    // int aack2 = readACK();
-    // write(0);
-    // write(0);
-    // write(1);
-    // write(0);
-    // write(0);
-    // write(0);
-    // write(0);
-    // write(0);
-    // BUS_ONE(DATA_PIN);// Release the data bus 
-    // int aack3 = readACK();
+    //Enable the MPU
+    idle();
+    start();
+    write(1);
+    write(1);
+    write(0);
+    write(1);
+    write(0);
+    write(0);
+    write(0);
+    write(0); //R/W
+    BUS_ONE(DATA_PIN);// Release the data bus 
+    int aack1 = readACK();
+    write(0);
+    write(1);
+    write(1);
+    write(0);
+    write(1);
+    write(0);
+    write(1);
+    write(1);
+    BUS_ONE(DATA_PIN);// Release the data bus 
+    int aack2 = readACK();
+    write(0);
+    write(0);
+    write(1);
+    write(0);
+    write(0);
+    write(0);
+    write(0);
+    write(1);
+    BUS_ONE(DATA_PIN);// Release the data bus 
+    int aack3 = readACK();
     // BUS_ZERO(DATA_PIN);
     // sleep_us(2.5);
     // BUS_ONE(CLOCK_PIN);
     // sleep_us(2.5);
     // BUS_ONE(DATA_PIN);
     // sleep_us(2.5);
-    // idle();
+    stop();
+    idle();
 
-    // //stop();
-    // idle();
+    //stop();
+    idle();
 
-    // sleep_us(10);
+    sleep_us(10);
 
     //Request data from accel
     idle();
