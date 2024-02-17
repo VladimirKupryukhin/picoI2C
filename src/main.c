@@ -21,347 +21,345 @@ int main () {
     int DATA_PIN = 14;
     int CLOCK_PIN = 15;
 
-    // Make everything go idle
-    BUS_ONE(CLOCK_PIN)
-    BUS_ONE(DATA_PIN)
+    gpio_init(DATA_PIN);
+    gpio_init(CLOCK_PIN);
 
-    // START
-    BUS_ZERO(DATA_PIN)
-    sleep_us(0.25);
-    BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
-
-    // SLAVE ADDRESS: 1
+    //Idle the bus
     BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
     BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
 
-    // SLAVE ADDRESS: 1
+    //START
+    BUS_ZERO(DATA_PIN);
+    sleep_us(2.5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+
+    //Slave addres 1
     BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
+    sleep_us(5);
     BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
 
-    // SLAVE ADDRESS: 0
-    BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
-    BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
-
-    // SLAVE ADDRESS: 1
-    BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
-    BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
-
-    // SLAVE ADDRESS: 0
-    BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
-    BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
-
-    // SLAVE ADDRESS: 0
-    BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
-    BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
-
-    // SLAVE ADDRESS: 0
-    BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
-    BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
-
-    // R/~W 0
-    BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
-    BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
-
-    // SLAVE ACK?
-    // Release the bus
+    //Slave addres 1
     BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
-    int firstACK = gpio_get(DATA_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(0.25);
-    sleep_us(0.25);
-
-    // REGISER ADDRESS: 0
-    BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
-    BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
+    sleep_us(5);
     BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
 
-    // REGISER ADDRESS: 1
+    //Slave addres 0
+    BUS_ZERO(DATA_PIN);
+    sleep_us(2.5);
+    BUS_ONE(CLOCK_PIN);
+    sleep_us(5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+
+    //Slave addres 1
     BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
+    sleep_us(5);
     BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
 
-    // REGISER ADDRESS: 0
+    //Slave addres 0
     BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
+    sleep_us(5);
     BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
 
-    // REGISER ADDRESS: 0
+    //Slave addres 0
     BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
+    sleep_us(5);
     BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
 
-    // REGISER ADDRESS: 0
+    //Slave addres 0
     BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
+    sleep_us(5);
     BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
 
-    // REGISER ADDRESS: 1
+    //Slave addres 0
+    BUS_ZERO(DATA_PIN);
+    sleep_us(2.5);
+    BUS_ONE(CLOCK_PIN);
+    sleep_us(5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+
+    //Let go of the data bus
     BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    
+    //  ack
+    sleep_us(2.5);//Continue having the clock be zero
     BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
+    sleep_us(2.5);
+    int firstAck = gpio_get(DATA_PIN);
+    sleep_us(2.5);
     BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
 
-    // REGISER ADDRESS: 0
+        //Slave addres 0
     BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
+    sleep_us(5);
     BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
 
-    // REGISER ADDRESS: 0
-    BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
-    BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
-
-    // SLAVE ACK?
-    // Release the bus
+        //Slave addres 1
     BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
-    int secondACK = gpio_get(DATA_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(0.25);
-    sleep_us(0.25);
+    sleep_us(5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
 
-    // REPEATED START
+        //Slave addres 0
+    BUS_ZERO(DATA_PIN);
+    sleep_us(2.5);
+    BUS_ONE(CLOCK_PIN);
+    sleep_us(5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+        //Slave addres 0
+    BUS_ZERO(DATA_PIN);
+    sleep_us(2.5);
+    BUS_ONE(CLOCK_PIN);
+    sleep_us(5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+        //Slave addres 0
+    BUS_ZERO(DATA_PIN);
+    sleep_us(2.5);
+    BUS_ONE(CLOCK_PIN);
+    sleep_us(5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+
+        //Slave addres 1
     BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
-    sleep_us(0.25);
-    BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(5);
     BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
 
-        // SLAVE ADDRESS: 1
+        //Slave addres 0
+    BUS_ZERO(DATA_PIN);
+    sleep_us(2.5);
+    BUS_ONE(CLOCK_PIN);
+    sleep_us(5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+
+        //Slave addres 0
+    BUS_ZERO(DATA_PIN);
+    sleep_us(2.5);
+    BUS_ONE(CLOCK_PIN);
+    sleep_us(5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+
+    //Let go of the data bus
     BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    
+    //  ack2
+    sleep_us(2.5);//Continue having the clock be zero
     BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
+    sleep_us(2.5);
+    int secondAck = gpio_get(DATA_PIN);
+    sleep_us(2.5);
     BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
 
-    // SLAVE ADDRESS: 1
+    // repeated start
     BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
-
-    // SLAVE ADDRESS: 0
+    sleep_us(2.5);
     BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
-    BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
+    sleep_us(2.5);
     BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
 
-    // SLAVE ADDRESS: 1
-    BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
-    BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
-
-    // SLAVE ADDRESS: 0
-    BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
-    BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
-
-    // SLAVE ADDRESS: 0
-    BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
-    BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
-
-    // SLAVE ADDRESS: 0
-    BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
-    BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
-
-    // R/~W 1
+           //Slave addres 1
     BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
+    sleep_us(5);
     BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
 
-    // SLAVE ACK?
-    // Release the bus
+           //Slave addres 1
     BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
-    int thirdACK = gpio_get(DATA_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(0.25);
-    sleep_us(0.25);
+    sleep_us(5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+
+           //Slave addres 0
+    BUS_ZERO(DATA_PIN);
+    sleep_us(2.5);
+    BUS_ONE(CLOCK_PIN);
+    sleep_us(5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+
+           //Slave addres 1
+    BUS_ONE(DATA_PIN);
+    sleep_us(2.5);
+    BUS_ONE(CLOCK_PIN);
+    sleep_us(5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+
+               //Slave addres 0
+    BUS_ZERO(DATA_PIN);
+    sleep_us(2.5);
+    BUS_ONE(CLOCK_PIN);
+    sleep_us(5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+
+               //Slave addres 0
+    BUS_ZERO(DATA_PIN);
+    sleep_us(2.5);
+    BUS_ONE(CLOCK_PIN);
+    sleep_us(5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+
+               //Slave addres 0
+    BUS_ZERO(DATA_PIN);
+    sleep_us(2.5);
+    BUS_ONE(CLOCK_PIN);
+    sleep_us(5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+
+               //Slave addres 1
+    BUS_ONE(DATA_PIN);
+    sleep_us(2.5);
+    BUS_ONE(CLOCK_PIN);
+    sleep_us(5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+
+
+    //Let go of the data bus
+    BUS_ONE(DATA_PIN);
+        //  ack3
+    sleep_us(2.5);//Continue having the clock be zero
+    BUS_ONE(CLOCK_PIN);
+    sleep_us(2.5);
+    int thirdAck = gpio_get(DATA_PIN);
+    sleep_us(2.5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+
+    // Read the 8 bits of data
 
     // D7
-    // Release the bus
-    BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
+    sleep_us(2.5);
     int d7 = gpio_get(DATA_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(0.25);
-    sleep_us(0.25);
+    sleep_us(2.5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
 
-        // D6
-    // Release the bus
-    BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+// D6
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
+    sleep_us(2.5);
     int d6 = gpio_get(DATA_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(0.25);
-    sleep_us(0.25);
+    sleep_us(2.5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);    
 
-        // D5
-    // Release the bus
-    BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    // D5
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
+    sleep_us(2.5);
     int d5 = gpio_get(DATA_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(0.25);
-    sleep_us(0.25);
+    sleep_us(2.5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
 
-        // D4
-    // Release the bus
-    BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    // D4
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
+    sleep_us(2.5);
     int d4 = gpio_get(DATA_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(0.25);
-    sleep_us(0.25);
+    sleep_us(2.5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
 
     // D3
-    // Release the bus
-    BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
+    sleep_us(2.5);
     int d3 = gpio_get(DATA_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(0.25);
-    sleep_us(0.25);
-    
+    sleep_us(2.5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
+
     // D2
-    // Release the bus
-    BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
+    sleep_us(2.5);
     int d2 = gpio_get(DATA_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(0.25);
-    sleep_us(0.25);
+    sleep_us(2.5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
 
     // D1
-    // Release the bus
-    BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
+    sleep_us(2.5);
     int d1 = gpio_get(DATA_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(0.25);
-    sleep_us(0.25);
+    sleep_us(2.5);
+    BUS_ZERO(CLOCK_PIN);
+    sleep_us(2.5);
 
     // D0
-    // Release the bus
-    BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
+    sleep_us(2.5);
     BUS_ONE(CLOCK_PIN);
+    sleep_us(2.5);
     int d0 = gpio_get(DATA_PIN);
-    sleep_us(0.5);
-    BUS_ZERO(0.25);
-    sleep_us(0.25);
-
-    // MASTER NACK
-    BUS_ONE(DATA_PIN);
-    sleep_us(0.25);
-    BUS_ONE(CLOCK_PIN);
-    sleep_us(0.5);
+    sleep_us(2.5);
     BUS_ZERO(CLOCK_PIN);
-    sleep_us(0.25);
-    
+    sleep_us(2.5);
 
-    // STOP
+    // Master NACK
+    BUS_ONE(DATA_PIN);
+    sleep_us(2.5);
+    BUS_ONE(CLOCK_PIN);
+    sleep_us(5);
     BUS_ZERO(DATA_PIN);
-    sleep_us(0.25);
-    BUS_ONE(CLOCK_PIN);
-    sleep_us(0.25);
-    BUS_ONE(CLOCK_PIN);
-    BUS_ONE(DATA_PIN)
-    sleep_us(0.25);
+    sleep_us(2.5);
 
-    
+    //STOP
+    BUS_ONE(CLOCK_PIN);
+    sleep_us(2.5);
+    BUS_ONE(DATA_PIN);
+    sleep_us(2.5);
+
+
+
 
 
 
