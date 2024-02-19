@@ -17,6 +17,7 @@ int readBit();
 void writeNACK();
 void stop();
 void repeatedStart();
+void writeByte(char);
 
 int main () {
     stdio_init_all();
@@ -36,87 +37,43 @@ int main () {
     gpio_init(DATA_PIN);
     gpio_init(CLOCK_PIN);
 
-    //Enable the MPU
-    idle();
+    //Gyro config
     start();
-    write(1);
-    write(1);
-    write(0);
-    write(1);
-    write(0);
-    write(0);
-    write(0);
-    write(0); //R/W
-    BUS_ONE(DATA_PIN);// Release the data bus 
-    int aack1 = readACK();
-    write(0);
-    write(1);
-    write(1);
-    write(0);
-    write(1);
-    write(0);
-    write(1);
-    write(1);
-    BUS_ONE(DATA_PIN);// Release the data bus 
-    int aack2 = readACK();
-    write(0);
-    write(0);
-    write(1);
-    write(0);
-    write(0);
-    write(0);
-    write(0);
-    write(1);
-    BUS_ONE(DATA_PIN);// Release the data bus 
-    int aack3 = readACK();
-    // BUS_ZERO(DATA_PIN);
-    // sleep_us(2.5);
-    // BUS_ONE(CLOCK_PIN);
-    // sleep_us(2.5);
-    // BUS_ONE(DATA_PIN);
-    // sleep_us(2.5);
+    writeByte(0b11010000);
+    readACK();
+    writeByte(0b00011011);//address
+    readACK();
+    writeByte(0b11100000);//data
+    readACK();
     stop();
-    idle();
-
-    //stop();
     idle();
 
     sleep_us(10);
 
-    //Request data from accel
+    //Enable MPU
+    start();
+    writeByte(0b11010000);
+    readACK();
+    writeByte(0b01101011);
+    readACK();
+    writeByte(0b10100000);
+    readACK();
+    stop();
+    idle();
+
+    sleep_us(10);
+
+    // Gyro x out
     idle();
     start();
-    write(1);
-    write(1);
-    write(0);
-    write(1);
-    write(0);
-    write(0);
-    write(0);
-    write(0); //R/W
-    BUS_ONE(DATA_PIN);// Release the data bus 
-    int ack1 = readACK();
-    write(0);
-    write(1);
-    write(0);
-    write(0);
-    write(0);
-    write(1);
-    write(0);
-    write(0);
-    BUS_ONE(DATA_PIN);// Release the data bus 
-    int ack2 = readACK();
+    writeByte(0b11010000);
+    readACK();
+    //writeByte(0b01000100);
+    writeByte(0b01000010);
+    readACK();
     repeatedStart();
-    write(1);
-    write(1);
-    write(0);
-    write(1);
-    write(0);
-    write(0);
-    write(0);
-    write(1);//R/W
-    BUS_ONE(DATA_PIN);// Release the data bus 
-    int ack3 = readACK();
+    writeByte(0b11010001);
+    readACK();
     int d7 = readBit();
     int d6 = readBit();
     int d5 = readBit();
@@ -127,9 +84,6 @@ int main () {
     int d0 = readBit();
     writeNACK();
     stop();
-
-    // writeNACK();
-    // stop();
     idle();
 
     return 0;
@@ -169,6 +123,7 @@ void write(int bit) {
 
 int readACK(){
         //  ack
+    BUS_ONE(DATA_PIN);// Release the data bus 
     sleep_us(2.5);//Continue having the clock be zero
     BUS_ONE(CLOCK_PIN);
     sleep_us(2.5);
@@ -217,6 +172,17 @@ void repeatedStart(){
     sleep_us(2.5);
     BUS_ZERO(CLOCK_PIN);
     sleep_us(2.5);
+}
+
+void writeByte(char byte){
+    write((byte & 0b10000000) >> 7); // MSB
+    write((byte & 0b01000000) >> 6); 
+    write((byte & 0b00100000) >> 5); 
+    write((byte & 0b00010000) >> 4); 
+    write((byte & 0b00001000) >> 3); 
+    write((byte & 0b00000100) >> 2); 
+    write((byte & 0b00000010) >> 1); 
+    write((byte & 0b00000001) >> 0); // MSB
 }
 
 
