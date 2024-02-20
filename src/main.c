@@ -105,6 +105,26 @@ int main () {
     writeByte(CLOCK_PIN, DATA_PIN, 0b00000001);
     readACK(CLOCK_PIN, DATA_PIN);
     stopSignal(CLOCK_PIN, DATA_PIN);
+    idle(CLOCK_PIN, DATA_PIN, 5);
+
+    startSignal(CLOCK_PIN, DATA_PIN);
+    writeByte(CLOCK_PIN, DATA_PIN, SLAVE_ADDRESS_WRITE);
+    readACK(CLOCK_PIN, DATA_PIN);
+    writeByte(CLOCK_PIN, DATA_PIN, PWR_MGMT_1_ADDRESS);
+    readACK(CLOCK_PIN, DATA_PIN);
+    repeatedStart(CLOCK_PIN, DATA_PIN);
+    writeByte(CLOCK_PIN, DATA_PIN, SLAVE_ADDRESS_READ);
+    readACK(CLOCK_PIN, DATA_PIN);
+    int d7 = readBit(CLOCK_PIN, DATA_PIN);
+    int d6 = readBit(CLOCK_PIN, DATA_PIN);
+    int d5 = readBit(CLOCK_PIN, DATA_PIN);
+    int d4 = readBit(CLOCK_PIN, DATA_PIN);
+    int d3 = readBit(CLOCK_PIN, DATA_PIN);
+    int d2 = readBit(CLOCK_PIN, DATA_PIN);
+    int d1 = readBit(CLOCK_PIN, DATA_PIN);
+    int d0 = readBit(CLOCK_PIN, DATA_PIN);
+    writeNACK(CLOCK_PIN, DATA_PIN);
+    stopSignal(CLOCK_PIN, DATA_PIN);
     idle(CLOCK_PIN, DATA_PIN, 0);
 
     printf("Full T us: %f\n", PERIOD_T_IN_US);
@@ -112,6 +132,9 @@ int main () {
     printf("Half T us: %f\n", HALF_PERIOD_T_IN_US);
     sleep_ms(1);
     printf("Quarter T us: %f\n", QUARTER_PERIOD_T_IN_US );
+    sleep_ms(1);
+    //printf("hello\n");
+    printf("pwr data: %d%d%d%d%d%d%d%d", d7, d6, d5, d4, d3, d2, d1, d0);
 
 
     // int* pwrmgmtAckArray = writeToMPU(PWR_MGMT_1_ADDRESS, 0b00000001);

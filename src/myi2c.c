@@ -47,7 +47,7 @@ int readACK(int pinSCL, int pinSDA){
 }   
 
 int readBit(int pinSCL, int pinSDA){
-    sleep_ms(QUARTER_PERIOD_T_IN_US);
+    sleep_us(QUARTER_PERIOD_T_IN_US);
     BUS_HIGH(pinSCL);
     int bit = gpio_get(pinSDA);
     sleep_us(QUARTER_PERIOD_T_IN_US);
