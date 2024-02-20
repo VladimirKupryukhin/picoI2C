@@ -34,14 +34,14 @@ void writeBit(int pinSCL, int pinSDA, int bit){
 
 int readACK(int pinSCL, int pinSDA){
     BUS_HIGH(pinSDA); // Release the data bus
-    int ack = readBit(pinSCL, pinSDA);
-    // sleep_ms(QUARTER_PERIOD_T_IN_MS);
-    // BUS_HIGH(pinSCL);
-    // sleep_ms(QUARTER_PERIOD_T_IN_MS);
-    // int ack = gpio_get(pinSDA);
-    // sleep_ms(QUARTER_PERIOD_T_IN_MS);
-    // BUS_LOW(pinSCL);
-    // sleep_ms(QUARTER_PERIOD_T_IN_MS);
+    //int ack = readBit(pinSCL, pinSDA);
+    sleep_us(QUARTER_PERIOD_T_IN_US);
+    BUS_HIGH(pinSCL);
+    sleep_us(QUARTER_PERIOD_T_IN_US);
+    int ack = gpio_get(pinSDA);
+    sleep_us(QUARTER_PERIOD_T_IN_US);
+    BUS_LOW(pinSCL);
+    sleep_us(QUARTER_PERIOD_T_IN_US);
 
     return ack;
 }   
