@@ -98,16 +98,13 @@ int main () {
 
     idle(CLOCK_PIN, DATA_PIN, 20);
     startSignal(CLOCK_PIN, DATA_PIN);
-    // writeBit(CLOCK_PIN, DATA_PIN, 1);
-    // writeBit(CLOCK_PIN, DATA_PIN, 1);
-    // writeBit(CLOCK_PIN, DATA_PIN, 0);
-    // writeBit(CLOCK_PIN, DATA_PIN, 1);
-    // writeBit(CLOCK_PIN, DATA_PIN, 0);
-    // writeBit(CLOCK_PIN, DATA_PIN, 0);
-    // writeBit(CLOCK_PIN, DATA_PIN, 0);
-    // writeBit(CLOCK_PIN, DATA_PIN, 0);
     writeByte(CLOCK_PIN, DATA_PIN, SLAVE_ADDRESS_WRITE);
     readACK(CLOCK_PIN, DATA_PIN);
+    writeByte(CLOCK_PIN, DATA_PIN, PWR_MGMT_1_ADDRESS);
+    readACK(CLOCK_PIN, DATA_PIN);
+    writeByte(CLOCK_PIN, DATA_PIN, 0b00000001);
+    readACK(CLOCK_PIN, DATA_PIN);
+    stopSignal(CLOCK_PIN, DATA_PIN);
     idle(CLOCK_PIN, DATA_PIN, 0);
 
     printf("Full T us: %f\n", PERIOD_T_IN_US);
