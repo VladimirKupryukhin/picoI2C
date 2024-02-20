@@ -9,9 +9,9 @@
 #define BUS_LOW(PIN) gpio_set_dir(PIN, GPIO_OUT)
 
 #define FREQUENCY_IN_HZ 100000.0
-#define PERIOD_T_IN_MS (1.0 / FREQUENCY_IN_HZ) * 1000.0
-#define HALF_PERIOD_T_IN_MS (PERIOD_T_IN_MS) / 2.0
-#define QUARTER_PERIOD_T_IN_MS (HALF_PERIOD_T_IN_MS) / 2.0
+#define PERIOD_T_IN_US (1.0 / FREQUENCY_IN_HZ) * 1000000.0
+#define HALF_PERIOD_T_IN_US (PERIOD_T_IN_US) / 2.0
+#define QUARTER_PERIOD_T_IN_US (HALF_PERIOD_T_IN_US) / 2.0
 
 // struct myi2cProps;
 // struct myi2cOps;
@@ -28,7 +28,7 @@
  * Keeps both the SCL and SDA pins high
  * 
 */
-void idle(int pinSCL, int pinSDA);
+void idle(int pinSCL, int pinSDA, int cycles);
 
 
 /**
