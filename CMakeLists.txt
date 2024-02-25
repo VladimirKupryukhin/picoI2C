@@ -12,6 +12,7 @@ pico_sdk_init()
 add_executable(${PROJECT_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/myi2c.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/mpu6000.c
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE 
