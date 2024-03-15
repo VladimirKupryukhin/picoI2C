@@ -108,7 +108,7 @@ int* readFromMPU(char targetAddress, int* dataArray, struct MPU6000* object) {
     startSignal(clockPin, dataPin);
     writeByte(clockPin, dataPin, SLAVE_ADDRESS_WRITE);
     int readAck1 = readACK(clockPin, dataPin);
-    writeByte(clockPin, clockPin, targetAddress);
+    writeByte(clockPin, dataPin, targetAddress);
     int readAck2 = readACK(clockPin, dataPin);
     repeatedStart(clockPin, dataPin);
     writeByte(clockPin, dataPin, SLAVE_ADDRESS_READ);
@@ -124,6 +124,8 @@ int* readFromMPU(char targetAddress, int* dataArray, struct MPU6000* object) {
     writeNACK(clockPin, dataPin);
     stopSignal(clockPin, dataPin);
     idle(clockPin, dataPin, 0);
+
+
 
     int* ackArray = malloc(sizeof(3 * sizeof(int)));
     ackArray[0] = readAck1;
