@@ -86,7 +86,7 @@ void destructorMPU6000(struct MPU6000* object) {
 }
 
 int* writeToMPU(char targetAddress, char dataToWrite, struct MPU6000* object, bool sendAckBits) {
-    printf("writeToMPU\n");
+    //printf("writeToMPU\n");
 
     if (object == NULL) {
         printf("writeToMPU: MPU IS NULL with targetAddress of ");
@@ -123,7 +123,7 @@ int* writeToMPU(char targetAddress, char dataToWrite, struct MPU6000* object, bo
 
 // dataArray = [MSB, ... , LSB]
 int* readFromMPU(char targetAddress, int* dataArray, struct MPU6000* object, bool sendAckBits) {
-    printf("readFromMPU\n");
+    //printf("readFromMPU\n");
 
     if (object == NULL) {
         printf("readFromMPU: MPU IS NULL with targetAddress of ");
@@ -252,15 +252,51 @@ double getAccelZ(struct MPU6000* object){
 }
 
 double getGyroX(struct MPU6000* object){
-    return -1.0;
+    int* dataHIGH = malloc(8 * sizeof(int));
+    readFromMPU(GYRO_XOUT_H, dataHIGH, object, false);
+
+    int* dataLOW = malloc(8 * sizeof(int));
+    readFromMPU(GYRO_XOUT_L, dataLOW, object, false);
+
+    short twosComp = convertReadDataToShort(dataHIGH, dataLOW);
+    short accelX = undo2sComp(twosComp);
+
+    free(dataHIGH);
+    free(dataLOW);
+
+    return (double)accelX / 131.0;
 }
 
 double getGyroY(struct MPU6000* object){
-    return -1.0;
+    int* dataHIGH = malloc(8 * sizeof(int));
+    readFromMPU(GYRO_YOUT_H, dataHIGH, object, false);
+
+    int* dataLOW = malloc(8 * sizeof(int));
+    readFromMPU(GYRO_YOUT_L, dataLOW, object, false);
+
+    short twosComp = convertReadDataToShort(dataHIGH, dataLOW);
+    short accelX = undo2sComp(twosComp);
+
+    free(dataHIGH);
+    free(dataLOW);
+
+    return (double)accelX / 131.0;
 }
 
 double getGyroZ(struct MPU6000* object){
-    return -1.0;
+    int* dataHIGH = malloc(8 * sizeof(int));
+    readFromMPU(GYRO_ZOUT_H, dataHIGH, object, false);
+
+    int* dataLOW = malloc(8 * sizeof(int));
+    readFromMPU(GYRO_ZOUT_L, dataLOW, object, false);
+
+    short twosComp = convertReadDataToShort(dataHIGH, dataLOW);
+    short accelX = undo2sComp(twosComp);
+
+    free(dataHIGH);
+    free(dataLOW);
+
+    return (double)accelX / 131.0;
 }
 
 short undo2sComp(short input){

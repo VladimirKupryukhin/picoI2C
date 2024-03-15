@@ -50,9 +50,19 @@ int main () {
         double accelY = mpu->func->getAccelY(mpu);
         double accelZ = mpu->func->getAccelZ(mpu);
 
+        double gyroX = mpu->func->getGyroX(mpu);
+        double gyroY = mpu->func->getGyroY(mpu);
+        double gyroZ = mpu->func->getGyroZ(mpu);
+
         printf("Accel X: %f\n", accelX);
         printf("Accel Y: %f\n", accelY);
         printf("Accel Z: %f\n", accelZ);
+
+        printf("Gyro X: %f\n", gyroX);
+        printf("Gyro Y: %f\n", gyroY);
+        printf("Gyro Z: %f\n", gyroZ);
+
+        printf("--------\n");
 
         sleep_ms(20);
     }
