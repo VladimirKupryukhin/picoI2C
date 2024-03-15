@@ -39,10 +39,22 @@ int main () {
 
     struct MPU6000* mpu = initMPU6000(CLOCK_PIN, DATA_PIN);;
 
-    for (int index = 0; index < 10; index++) {
-        sleep_ms(1000);
-        double temp = mpu->func->getTemperature(mpu);
-        printf("The current temperature: %f\n", temp);
+    // for (int index = 0; index < 10; index++) {
+    //     sleep_ms(1000);
+    //     double temp = mpu->func->getTemperature(mpu);
+    //     printf("The current temperature: %f\n", temp);
+    // }
+
+    while (true) {
+        double accelX = mpu->func->getAccelX(mpu);
+        double accelY = mpu->func->getAccelY(mpu);
+        double accelZ = mpu->func->getAccelZ(mpu);
+
+        printf("Accel X: %f\n", accelX);
+        printf("Accel Y: %f\n", accelY);
+        printf("Accel Z: %f\n", accelZ);
+
+        sleep_ms(20);
     }
 
 

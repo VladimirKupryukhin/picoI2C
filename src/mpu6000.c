@@ -21,6 +21,13 @@ struct MPU6000* initMPU6000(int clockPin, int dataPin) {
     functions->writeToMPU = &writeToMPU;
     functions->readFromMPU = &readFromMPU;
     functions->getTemperature = &getTemperature;
+    functions->getAccelX = &getAccelX;
+    functions->getAccelY = &getAccelY;
+    functions->getAccelZ = &getAccelZ;
+    functions->getGyroX = &getGyroX;
+    functions->getGyroY = &getGyroY;
+    functions->getGyroZ = &getGyroZ;
+
 
     object->func = functions;
     object->prop = properties;
@@ -194,4 +201,71 @@ short convertReadDataToShort(int* high, int* low){
     }
 
     return number;
+}
+
+double getAccelX(struct MPU6000* object){
+    int* dataHIGH = malloc(8 * sizeof(int));
+    readFromMPU(ACCEL_XOUT_H, dataHIGH, object, false);
+
+    int* dataLOW = malloc(8 * sizeof(int));
+    readFromMPU(ACCEL_XOUT_L, dataLOW, object, false);
+
+    short twosComp = convertReadDataToShort(dataHIGH, dataLOW);
+    short accelX = undo2sComp(twosComp);
+
+    free(dataHIGH);
+    free(dataLOW);
+
+    return (double)accelX / 16384.0;
+}
+
+double getAccelY(struct MPU6000* object){
+    int* dataHIGH = malloc(8 * sizeof(int));
+    readFromMPU(ACCEL_YOUT_H, dataHIGH, object, false);
+
+    int* dataLOW = malloc(8 * sizeof(int));
+    readFromMPU(ACCEL_YOUT_L, dataLOW, object, false);
+
+    short twosComp = convertReadDataToShort(dataHIGH, dataLOW);
+    short accelX = undo2sComp(twosComp);
+
+    free(dataHIGH);
+    free(dataLOW);
+
+    return (double)accelX / 16384.0;
+}
+
+double getAccelZ(struct MPU6000* object){
+    int* dataHIGH = malloc(8 * sizeof(int));
+    readFromMPU(ACCEL_ZOUT_H, dataHIGH, object, false);
+
+    int* dataLOW = malloc(8 * sizeof(int));
+    readFromMPU(ACCEL_ZOUT_L, dataLOW, object, false);
+
+    short twosComp = convertReadDataToShort(dataHIGH, dataLOW);
+    short accelX = undo2sComp(twosComp);
+
+    free(dataHIGH);
+    free(dataLOW);
+
+    return (double)accelX / 16384.0;
+}
+
+double getGyroX(struct MPU6000* object){
+    return -1.0;
+}
+
+double getGyroY(struct MPU6000* object){
+    return -1.0;
+}
+
+double getGyroZ(struct MPU6000* object){
+    return -1.0;
+}
+
+short undo2sComp(short input){
+    input = input - 1;
+    input = ~input;
+
+    return input;
 }
