@@ -17,8 +17,8 @@ struct MPU6000;
 
 struct func{
     void (*destructor) (struct MPU6000* object);
-    int* (*writeToMPU) (char targetAddress, char dataToWrite, struct MPU6000* object);
-    int* (*readFromMPU) (char targetAddress, int* dataArray, struct MPU6000* object);
+    int* (*writeToMPU) (char targetAddress, char dataToWrite, struct MPU6000* object, bool sendAckBits);
+    int* (*readFromMPU) (char targetAddress, int* dataArray, struct MPU6000* object, bool sendAckBits);
 };
 
 struct prop{
@@ -35,8 +35,8 @@ struct MPU6000{
 struct MPU6000* initMPU6000(int clockPin, int dataPin);
 void destructorMPU6000(struct MPU6000* object);
 
-int* writeToMPU(char targetAddress, char dataToWrite, struct MPU6000* object); 
-int* readFromMPU(char targetAddress, int* dataArray, struct MPU6000* object);
+int* writeToMPU(char targetAddress, char dataToWrite, struct MPU6000* object, bool sendAckBits); 
+int* readFromMPU(char targetAddress, int* dataArray, struct MPU6000* object, bool sendAckBits);
 
 
 #endif
