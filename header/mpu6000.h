@@ -42,6 +42,7 @@ void destructorMPU6000(struct MPU6000* object);
 int* writeToMPU(char targetAddress, char dataToWrite, struct MPU6000* object, bool sendAckBits); 
 int* readFromMPU(char targetAddress, int* dataArray, struct MPU6000* object, bool sendAckBits);
 double getTemperature(struct MPU6000* object);
+short convertReadDataToShort(int* high, int* low);
 
 
 #endif

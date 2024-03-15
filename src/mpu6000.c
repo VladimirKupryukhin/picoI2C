@@ -80,6 +80,13 @@ void destructorMPU6000(struct MPU6000* object) {
 
 int* writeToMPU(char targetAddress, char dataToWrite, struct MPU6000* object, bool sendAckBits) {
     printf("writeToMPU\n");
+
+    if (object == NULL) {
+        printf("writeToMPU: MPU IS NULL with targetAddress of ");
+        printf("%d",((int)targetAddress));
+        printf("\n");
+    }
+
     int clockPin = object->prop->clockPin;
     int dataPin = object->prop->dataPin;
 
@@ -110,6 +117,12 @@ int* writeToMPU(char targetAddress, char dataToWrite, struct MPU6000* object, bo
 // dataArray = [MSB, ... , LSB]
 int* readFromMPU(char targetAddress, int* dataArray, struct MPU6000* object, bool sendAckBits) {
     printf("readFromMPU\n");
+
+    if (object == NULL) {
+        printf("readFromMPU: MPU IS NULL with targetAddress of ");
+        printf("%d",((int)targetAddress));
+        printf("\n");
+    }
 
     int clockPin = object->prop->clockPin;
     int dataPin = object->prop->dataPin;
@@ -151,28 +164,34 @@ int* readFromMPU(char targetAddress, int* dataArray, struct MPU6000* object, boo
 
 
 double getTemperature(struct MPU6000* object){
-    printf("get temp\n");
-
-
     int* tempDataHIGH = malloc(8 * sizeof(int));
     readFromMPU(TEMP_OUT_H, tempDataHIGH, object, false);
 
     int* tempDataLOW = malloc(8 * sizeof(int));
     readFromMPU(TEMP_OUT_L, tempDataLOW, object, false);
 
-    short signedTempRaw = 0;
+    short signedTempRaw = convertReadDataToShort(tempDataHIGH, tempDataLOW);
 
-    //The high
-    for (int index = 0; index < 8; index++) {
-        signedTempRaw = (((short)(tempDataHIGH[index])) << 15 - index) | signedTempRaw;
-    }
-
-    //the low
-    for (int index = 0; index < 8; index++) {
-        signedTempRaw = (((short)(tempDataLOW[index])) << 7 - index) | signedTempRaw;
-    }
+    free(tempDataHIGH);
+    free(tempDataLOW);
 
     double tempInCelsius = ((double)(signedTempRaw) / 340.0) + 36.53;
 
     return tempInCelsius;
+}
+
+short convertReadDataToShort(int* high, int* low){
+    short number = 0;
+
+    //The high
+    for (int index = 0; index < 8; index++) {
+        number = (((short)(high[index])) << 15 - index) | number;
+    }
+
+    //the low
+    for (int index = 0; index < 8; index++) {
+        number = (((short)(low[index])) << 7 - index) | number;
+    }
+
+    return number;
 }
