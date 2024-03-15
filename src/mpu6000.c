@@ -20,6 +20,7 @@ struct MPU6000* initMPU6000(int clockPin, int dataPin) {
     functions->destructor = &destructorMPU6000;
     functions->writeToMPU = &writeToMPU;
     functions->readFromMPU = &readFromMPU;
+    functions->getTemperature = &getTemperature;
 
     object->func = functions;
     object->prop = properties;
@@ -59,8 +60,9 @@ struct MPU6000* initMPU6000(int clockPin, int dataPin) {
     free(GYRO_CONFIG_result);
     free(ACCEL_CONFIG_result);
     free(PWR_MGMT_1_ADDRESS_result);
-    //TODO check if all of these results are filled with 0s to
-    // confirm that everything works
+    
+    printf("Finished MPU6000 setup!\n");
+
     return object;
 
 
@@ -132,7 +134,7 @@ int* readFromMPU(char targetAddress, int* dataArray, struct MPU6000* object, boo
     stopSignal(clockPin, dataPin);
     idle(clockPin, dataPin, 0);
 
-
+    
     if (sendAckBits) {
         int* ackArray = malloc(sizeof(10 * sizeof(int)));
         ackArray[0] = readAck1;
@@ -145,4 +147,32 @@ int* readFromMPU(char targetAddress, int* dataArray, struct MPU6000* object, boo
 
     return NULL;    
 
+}
+
+
+double getTemperature(struct MPU6000* object){
+    printf("get temp\n");
+
+
+    int* tempDataHIGH = malloc(8 * sizeof(int));
+    readFromMPU(TEMP_OUT_H, tempDataHIGH, object, false);
+
+    int* tempDataLOW = malloc(8 * sizeof(int));
+    readFromMPU(TEMP_OUT_L, tempDataLOW, object, false);
+
+    short signedTempRaw = 0;
+
+    //The high
+    for (int index = 0; index < 8; index++) {
+        signedTempRaw = (((short)(tempDataHIGH[index])) << 15 - index) | signedTempRaw;
+    }
+
+    //the low
+    for (int index = 0; index < 8; index++) {
+        signedTempRaw = (((short)(tempDataLOW[index])) << 7 - index) | signedTempRaw;
+    }
+
+    double tempInCelsius = ((double)(signedTempRaw) / 340.0) + 36.53;
+
+    return tempInCelsius;
 }

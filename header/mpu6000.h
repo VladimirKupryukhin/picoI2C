@@ -13,12 +13,16 @@
 #define GYRO_CONFIG (char)(27)
 #define ACCEL_CONFIG (char)(28)
 
+#define TEMP_OUT_H (char)(65) // TEMP_OUT[15:8]
+#define TEMP_OUT_L (char)(66) // TEMP_OUT[7:0]
+
 struct MPU6000;
 
 struct func{
     void (*destructor) (struct MPU6000* object);
     int* (*writeToMPU) (char targetAddress, char dataToWrite, struct MPU6000* object, bool sendAckBits);
     int* (*readFromMPU) (char targetAddress, int* dataArray, struct MPU6000* object, bool sendAckBits);
+    double (*getTemperature) (struct MPU6000* object);
 };
 
 struct prop{
@@ -37,6 +41,7 @@ void destructorMPU6000(struct MPU6000* object);
 
 int* writeToMPU(char targetAddress, char dataToWrite, struct MPU6000* object, bool sendAckBits); 
 int* readFromMPU(char targetAddress, int* dataArray, struct MPU6000* object, bool sendAckBits);
+double getTemperature(struct MPU6000* object);
 
 
 #endif

@@ -39,7 +39,11 @@ int main () {
 
     struct MPU6000* mpu = initMPU6000(CLOCK_PIN, DATA_PIN);;
 
-    
+    for (int index = 0; index < 10; index++) {
+        sleep_ms(1000);
+        double temp = mpu->func->getTemperature(mpu);
+        printf("The current temperature: %f\n", temp);
+    }
 
 
     (*(mpu->func->destructor))(mpu);
