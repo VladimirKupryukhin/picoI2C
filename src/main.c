@@ -37,22 +37,79 @@ int main () {
     gpio_init(DATA_PIN);
     gpio_init(CLOCK_PIN);
 
-    struct MPU6000* mpu = initMPU6000(10, 20);;
+    struct MPU6000* mpu = initMPU6000(CLOCK_PIN, DATA_PIN);;
     
 
     printf("Address of mpu = %p\n", &mpu);
     sleep_ms(1);
     printf("address of destructor = %p\n", (mpu->func->destructor));
     
+    //writeToMPU(PWR_MGMT_1_ADDRESS, 0b00000001, mpu);
+
+    BUS_HIGH(DATA_PIN);
+    BUS_HIGH(CLOCK_PIN);
+
+    idle(CLOCK_PIN, DATA_PIN, 20);
+    startSignal(CLOCK_PIN, DATA_PIN);
+    writeByte(CLOCK_PIN, DATA_PIN, SLAVE_ADDRESS_WRITE);
+    int test1 = readACK(CLOCK_PIN, DATA_PIN);
+    writeByte(CLOCK_PIN, DATA_PIN, PWR_MGMT_1_ADDRESS);
+    int test2 = readACK(CLOCK_PIN, DATA_PIN);
+    writeByte(CLOCK_PIN, DATA_PIN, 0b00000001);
+    int test3 = readACK(CLOCK_PIN, DATA_PIN);
+    stopSignal(CLOCK_PIN, DATA_PIN);
+    idle(CLOCK_PIN, DATA_PIN, 5);
+
+
+    int* response = malloc(3 * sizeof(int));
+
+    int* readpwrmgmtData = malloc(8 * sizeof(int));
+    response = mpu->func->readFromMPU(PWR_MGMT_1_ADDRESS, readpwrmgmtData, mpu);
+
+    printf("Response: %d%d%d\n", response[0], response[1], response[2]);
+
+    printArray(readpwrmgmtData, 8, true);
+
     (*(mpu->func->destructor))(mpu);
-    //(*(mpu->func->writeToMPU))('a','b', mpu);
-    //(*(mpu->func->readFromMPU))('a',NULL, mpu);
 
-    int* readpwrmgmtAckArray = malloc(8 * sizeof(int));
-    mpu->func->readFromMPU(PWR_MGMT_1_ADDRESS, readpwrmgmtAckArray, mpu);
+    // -------
+    // BUS_HIGH(DATA_PIN);
+    // BUS_HIGH(CLOCK_PIN);
 
-    printArray(readpwrmgmtAckArray, 8, true);
+    // idle(CLOCK_PIN, DATA_PIN, 20);
+    // startSignal(CLOCK_PIN, DATA_PIN);
+    // writeByte(CLOCK_PIN, DATA_PIN, SLAVE_ADDRESS_WRITE);
+    // int test1 = readACK(CLOCK_PIN, DATA_PIN);
+    // writeByte(CLOCK_PIN, DATA_PIN, PWR_MGMT_1_ADDRESS);
+    // int test2 = readACK(CLOCK_PIN, DATA_PIN);
+    // writeByte(CLOCK_PIN, DATA_PIN, 0b00000001);
+    // int test3 = readACK(CLOCK_PIN, DATA_PIN);
+    // stopSignal(CLOCK_PIN, DATA_PIN);
+    // idle(CLOCK_PIN, DATA_PIN, 5);
 
+    // printf("test %d %d %d\n", test1, test2, test3);
+
+    startSignal(CLOCK_PIN, DATA_PIN);
+    writeByte(CLOCK_PIN, DATA_PIN, SLAVE_ADDRESS_WRITE);
+    readACK(CLOCK_PIN, DATA_PIN);
+    writeByte(CLOCK_PIN, DATA_PIN, PWR_MGMT_1_ADDRESS);
+    readACK(CLOCK_PIN, DATA_PIN);
+    repeatedStart(CLOCK_PIN, DATA_PIN);
+    writeByte(CLOCK_PIN, DATA_PIN, SLAVE_ADDRESS_READ);
+    readACK(CLOCK_PIN, DATA_PIN);
+    int d7 = readBit(CLOCK_PIN, DATA_PIN);
+    int d6 = readBit(CLOCK_PIN, DATA_PIN);
+    int d5 = readBit(CLOCK_PIN, DATA_PIN);
+    int d4 = readBit(CLOCK_PIN, DATA_PIN);
+    int d3 = readBit(CLOCK_PIN, DATA_PIN);
+    int d2 = readBit(CLOCK_PIN, DATA_PIN);
+    int d1 = readBit(CLOCK_PIN, DATA_PIN);
+    int d0 = readBit(CLOCK_PIN, DATA_PIN);
+    writeNACK(CLOCK_PIN, DATA_PIN);
+    stopSignal(CLOCK_PIN, DATA_PIN);
+    idle(CLOCK_PIN, DATA_PIN, 0);
+
+    printf("Result: %d%d%d%d%d%d%d%d\n", d7, d6, d5, d4, d3, d2, d1, d0);
 
     sleep_ms(2);
     printf("end of program");

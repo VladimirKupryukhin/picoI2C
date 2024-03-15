@@ -32,6 +32,28 @@ struct MPU6000* initMPU6000(int clockPin, int dataPin) {
     int* ACCEL_CONFIG_result = writeToMPU(ACCEL_CONFIG, 0b00000000, object);
     int* PWR_MGMT_1_ADDRESS_result = writeToMPU(PWR_MGMT_1_ADDRESS, 0b00000001, object);
 
+    if (SMPRT_DIV_result[0] == 1 || SMPRT_DIV_result[1] == 1 || SMPRT_DIV_result[2] == 1) {
+        printf("SMPRT_DIV_result is not all 0's!: %d %d %d\n", SMPRT_DIV_result[0], SMPRT_DIV_result[1], SMPRT_DIV_result[2]);
+    }
+
+    if (CONFIG_result[0] == 1 || CONFIG_result[1] == 1 || CONFIG_result[2] == 1) {
+        printf("CONFIG_result is not all 0's!: %d %d %d\n", CONFIG_result[0], CONFIG_result[1], CONFIG_result[2]);
+    }
+
+    if (GYRO_CONFIG_result[0] == 1 || GYRO_CONFIG_result[1] == 1 || GYRO_CONFIG_result[2] == 1) {
+        printf("GYRO_CONFIG_result is not all 0's!: %d %d %d\n", GYRO_CONFIG_result[0], GYRO_CONFIG_result[1], GYRO_CONFIG_result[2]);
+    }
+
+    if (ACCEL_CONFIG_result[0] == 1 || ACCEL_CONFIG_result[1] == 1 || ACCEL_CONFIG_result[2] == 1) {
+        printf("ACCEL_CONFIG_result is not all 0's!: %d %d %d\n", ACCEL_CONFIG_result[0], ACCEL_CONFIG_result[1], ACCEL_CONFIG_result[2]);
+    }
+
+    if (PWR_MGMT_1_ADDRESS_result[0] == 1 || PWR_MGMT_1_ADDRESS_result[1] == 1 || PWR_MGMT_1_ADDRESS_result[2] == 1) {
+        printf("PWR_MGMT_1_ADDRESS_result is not all 0's!: %d %d %d\n", PWR_MGMT_1_ADDRESS_result[0], PWR_MGMT_1_ADDRESS_result[1], PWR_MGMT_1_ADDRESS_result[2]);
+    }
+
+
+
     free(SMPRT_DIV_result);
     free(CONFIG_result);
     free(GYRO_CONFIG_result);
@@ -57,15 +79,16 @@ int* writeToMPU(char targetAddress, char dataToWrite, struct MPU6000* object) {
     int clockPin = object->prop->clockPin;
     int dataPin = object->prop->dataPin;
 
+    idle(clockPin, dataPin, 5);
     startSignal(clockPin, dataPin);
-    writeByte(clockPin, dataPin, 0b11010000);
+    writeByte(clockPin, dataPin, SLAVE_ADDRESS_WRITE);
     int writeAck1 = readACK(clockPin, dataPin);
     writeByte(clockPin, dataPin, targetAddress);
     int writeAck2 = readACK(clockPin, dataPin);
     writeByte(clockPin, dataPin, dataToWrite);
     int writeAck3 = readACK(clockPin, dataPin);
     stopSignal(clockPin, dataPin);
-    idle(clockPin, dataPin, 0);
+    idle(clockPin, dataPin, 5);
 
     int* ackArray = malloc(sizeof(10 * sizeof(int)));
     ackArray[0] = writeAck1;
@@ -77,7 +100,7 @@ int* writeToMPU(char targetAddress, char dataToWrite, struct MPU6000* object) {
 
 // dataArray = [MSB, ... , LSB]
 int* readFromMPU(char targetAddress, int* dataArray, struct MPU6000* object) {
-    //printf("readFromMPU\n");
+    printf("readFromMPU\n");
 
     int clockPin = object->prop->clockPin;
     int dataPin = object->prop->dataPin;
@@ -102,7 +125,7 @@ int* readFromMPU(char targetAddress, int* dataArray, struct MPU6000* object) {
     stopSignal(clockPin, dataPin);
     idle(clockPin, dataPin, 0);
 
-    int* ackArray = malloc(sizeof(10 * sizeof(int)));
+    int* ackArray = malloc(sizeof(3 * sizeof(int)));
     ackArray[0] = readAck1;
     ackArray[1] = readAck2;
     ackArray[2] = readAck3;
