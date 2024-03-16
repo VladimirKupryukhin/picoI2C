@@ -27,6 +27,9 @@ struct MPU6000* initMPU6000(int clockPin, int dataPin) {
     functions->getGyroX = &getGyroX;
     functions->getGyroY = &getGyroY;
     functions->getGyroZ = &getGyroZ;
+    functions->getXAngleInDegrees = &getXAngleInDegrees;
+    functions->getYAngleInDegrees = &getYAngleInDegrees;
+    functions->getZAngleInDegrees = &getZAngleInDegrees;
 
 
     object->func = functions;
@@ -60,14 +63,27 @@ struct MPU6000* initMPU6000(int clockPin, int dataPin) {
         printf("PWR_MGMT_1_ADDRESS_result is not all 0's!: %d %d %d\n", PWR_MGMT_1_ADDRESS_result[0], PWR_MGMT_1_ADDRESS_result[1], PWR_MGMT_1_ADDRESS_result[2]);
     }
 
-
-
     free(SMPRT_DIV_result);
     free(CONFIG_result);
     free(GYRO_CONFIG_result);
     free(ACCEL_CONFIG_result);
     free(PWR_MGMT_1_ADDRESS_result);
-    
+
+    sleep_ms(1000);
+
+    double accelX = getAccelX(object);
+    object->prop->xOffset = acos(accelX);
+
+    double accelY = getAccelY(object);
+    object->prop->yOffset = acos(accelY);
+
+    double accelZ = getAccelZ(object);
+    object->prop->zOffset = acos(accelZ);
+
+    printf("xOffset: %f\n", object->prop->xOffset);
+    printf("yOffset: %f\n", object->prop->yOffset);
+    printf("zOffset: %f\n", object->prop->zOffset);
+
     printf("Finished MPU6000 setup!\n");
 
     return object;
@@ -216,7 +232,15 @@ double getAccelX(struct MPU6000* object){
     free(dataHIGH);
     free(dataLOW);
 
-    return (double)accelX / 16384.0;
+    double finalValue = (double)(accelX) / 16384.0;
+    if (finalValue < -1) {
+        finalValue = -1;
+    }
+    else if (finalValue > 1) {
+        finalValue = 1;
+    }
+
+    return finalValue;
 }
 
 double getAccelY(struct MPU6000* object){
@@ -232,7 +256,15 @@ double getAccelY(struct MPU6000* object){
     free(dataHIGH);
     free(dataLOW);
 
-    return (double)accelX / 16384.0;
+    double finalValue = (double)(accelX) / 16384.0;
+    if (finalValue < -1) {
+        finalValue = -1;
+    }
+    else if (finalValue > 1) {
+        finalValue = 1;
+    }
+
+    return finalValue;
 }
 
 double getAccelZ(struct MPU6000* object){
@@ -248,7 +280,16 @@ double getAccelZ(struct MPU6000* object){
     free(dataHIGH);
     free(dataLOW);
 
-    return (double)accelX / 16384.0;
+    double finalValue = (double)(accelX) / 16384.0;
+    if (finalValue < -1) {
+        finalValue = -1;
+    }
+    else if (finalValue > 1) {
+        finalValue = 1;
+    }
+
+    return finalValue;
+
 }
 
 double getGyroX(struct MPU6000* object){
@@ -304,4 +345,23 @@ short undo2sComp(short input){
     input = ~input;
 
     return input;
+}
+
+
+double getXAngleInDegrees(struct MPU6000* object){
+    double accelX = getAccelX(object);
+    double radians = acos(accelX);
+    return (object->prop->xOffset * (180.0 / 3.14)) - ((radians) * (180.0 / 3.14));
+}
+
+double getYAngleInDegrees(struct MPU6000* object){
+    double accelY = getAccelY(object);
+    double radians = acos(accelY);
+    return (object->prop->yOffset * (180.0 / 3.14)) - ((radians) * (180.0 / 3.14));
+}
+
+double getZAngleInDegrees(struct MPU6000* object){
+    double accelZ = getAccelZ(object);
+    double radians = acos(accelZ);
+    return (object->prop->zOffset * (180.0 / 3.14)) - ((radians) * (180.0 / 3.14));
 }

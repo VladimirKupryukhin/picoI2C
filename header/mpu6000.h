@@ -3,6 +3,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
+
 #include "myi2c.h"
 
 #define SLAVE_ADDRESS_WRITE 0b11010000
@@ -44,6 +46,9 @@ struct func{
     double (*getGyroX) (struct MPU6000* object);
     double (*getGyroY) (struct MPU6000* object);
     double (*getGyroZ) (struct MPU6000* object);
+    double (*getXAngleInDegrees) (struct MPU6000* object);
+    double (*getYAngleInDegrees) (struct MPU6000* object);
+    double (*getZAngleInDegrees) (struct MPU6000* object);
 };
 
 struct prop{
@@ -55,6 +60,9 @@ struct prop{
     short gyroX;
     short gyroY;
     short gyroZ;
+    double xOffset; // In radians
+    double yOffset; // In radians
+    double zOffset; // In radians
 };
 
 struct MPU6000{
@@ -75,6 +83,10 @@ double getAccelZ(struct MPU6000* object);
 double getGyroX(struct MPU6000* object);
 double getGyroY(struct MPU6000* object);
 double getGyroZ(struct MPU6000* object);
+
+double getXAngleInDegrees(struct MPU6000* object);
+double getYAngleInDegrees(struct MPU6000* object);
+double getZAngleInDegrees(struct MPU6000* object);
 
 short convertReadDataToShort(int* high, int* low);
 short undo2sComp(short input);
